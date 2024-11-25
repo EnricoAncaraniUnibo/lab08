@@ -23,16 +23,23 @@ class TestDeathNote {
 
     @Test
     public void testNonExistingRules() {
-        assertThrows(IllegalArgumentException.class, () -> death.getRule(0));
-        final Exception e = new Exception(death.getRule(0));
-        assertFalse(e.getMessage().isEmpty());
+        try {
+            assertThrows(IllegalArgumentException.class, () -> death.getRule(0));
+            death.getRule(0);
+        } catch (Exception e) {
+            assertFalse(e.getMessage().isEmpty());
+            assertFalse(e.getMessage().isBlank());
+            assertDoesNotThrow(() -> Objects.requireNonNull(e.getMessage()));
+        }
+        try {
+            assertThrows(IllegalArgumentException.class, () -> death.getRule(-1));
+            death.getRule(-1);
+        } catch (Exception e) {
+            assertFalse(e.getMessage().isEmpty());
         assertFalse(e.getMessage().isBlank());
         assertDoesNotThrow(() -> Objects.requireNonNull(e.getMessage()));
-        assertThrows(IllegalArgumentException.class, () -> death.getRule(-1));
-        Exception e2 = new Exception(death.getRule(-1));
-        assertFalse(e2.getMessage().isEmpty());
-        assertFalse(e2.getMessage().isBlank());
-        assertDoesNotThrow(() -> Objects.requireNonNull(e2.getMessage()));
+        assertThrows(IllegalArgumentException.class, () -> death.getRule(2000));
+        }
     }
 
     @Test
@@ -59,7 +66,7 @@ class TestDeathNote {
     public void testCauseDeath() throws InterruptedException {
         assertThrows(IllegalStateException.class,() -> death.writeDeathCause("test"));
         death.writeName("testHuman");
-        assertEquals(death.getDeathCause("test"), "heart attack");
+        assertEquals(death.getDeathCause("testHuman"), "heart attack");
         death.writeName("testHuman2");
         assertEquals(true, death.writeDeathCause("karting accident"));
         assertEquals(death.getDeathCause("testHuman2"), "karting accident");
