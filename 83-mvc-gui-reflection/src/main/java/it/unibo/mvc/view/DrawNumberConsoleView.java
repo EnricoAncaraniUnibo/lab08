@@ -15,41 +15,11 @@ public class DrawNumberConsoleView implements DrawNumberView{
 
     @Override
     public void start(){
-        while (true) {
-            this.game();
-        }
+
     }
 
     public void showMessage(String message) {
         System.out.println(message);
-    }
-
-    public void game() {
-        System.out.println("Write a number to try, R to reset, and Q to quit");
-        BufferedReader reader= new BufferedReader(new InputStreamReader(System.in));
-        String tr;
-        while (true) {
-            try {
-                tr = reader.readLine();
-                switch (tr) {
-                    case "R":
-                        controller.resetGame();
-                        break;
-                    case "Q":
-                        controller.quit();
-                        break;
-                    default:
-                        try {
-                            controller.newAttempt(Integer.parseInt(tr));
-                        } catch (Exception exception) {
-                            System.out.println("An integer please..");
-                        }
-                        break;
-                }
-            } catch (Exception e) {
-                System.out.println("Unknow command");
-            }
-        }
     }
 
     @Override
@@ -64,9 +34,6 @@ public class DrawNumberConsoleView implements DrawNumberView{
             default -> throw new IllegalStateException("Unknown game state");
         }
         controller.resetGame();
-        while (true) {
-            this.game();
-        }
     }
     
 }
